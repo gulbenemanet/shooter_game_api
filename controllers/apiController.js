@@ -78,7 +78,7 @@ const getUsers = async (req, res) => {
 
 const getRooms = async (req, res) => {
   try {
-    const rooms = await Room.find();
+    const rooms = await Room.find({ count: { $lte: 3 } });
     res.json(rooms);
   } catch (err) {
     res.status(500).json({ message: 'Sunucu hatası ' + err});
@@ -147,6 +147,9 @@ const joinRoom = async (req, res) => {
     const user = await Gamer.findById( userId );
     if (!room) {
       return res.status(404).json({ message: 'Oda bulunamadı' });
+    }
+    if (room.count > 3) {
+      return res.json({ message: 'Oda dolu' });
     }
     if (!room.participants.includes(user.username)) {
       room.participants.push(user.username);
