@@ -2,7 +2,8 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Gamer = require('../models/gamer')
 const Room = require('../models/rooms')
-const Game = require('../models/games')
+const Game = require('../models/games');
+const { log } = require('console');
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
@@ -70,18 +71,19 @@ const getRooms = async (req, res) => {
 
 const postRooms = async (req, res) => {
   try {
-    const { name } = req.body;
-    console.log(req.user);
-
+    const { name, userId } = req.body;
+    console.log(userId);
+    const user = await Gamer.findById( userId );
+    // console.log(user);
     const room = new Room({
       name,
-      roomAdmin: req.user
+      roomAdmin: user.username
     });
 
     await room.save();
     res.status(201).json(room);
   } catch (err) {
-    res.status(500).json({ message: 'Sunucu hatası' });
+    res.status(500).json({ message: 'Sunucu hatası' + err});
   }
 }
 

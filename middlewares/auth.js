@@ -5,7 +5,7 @@ module.exports = async function auth(req, res, next) {
     try {
         // console.log(req.headers);
         const token = await (req.headers['authorization'].split(' ')[1])
-        console.log(token);
+        // console.log(token);
         if (token == null) {
             return res.status(401).json({
                 success: false,
@@ -23,7 +23,7 @@ module.exports = async function auth(req, res, next) {
         } else {
             const sonuc = jwt.verify(token, 'supersecret')
 
-            //console.log(sonuc);
+            // console.log(sonuc);
             const bulunan = await User.findById(sonuc.id)
             req.user = bulunan
             next()

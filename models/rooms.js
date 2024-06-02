@@ -13,7 +13,7 @@ const roomSchema = new Schema({
         type: Number
     },
     roomAdmin: {
-        type: Number
+        type: String
     },
     count: {
         type: Number,
