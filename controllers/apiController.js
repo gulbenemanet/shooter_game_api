@@ -70,7 +70,7 @@ const getRooms = async (req, res) => {
 
 const postRooms = async (req, res) => {
   try {
-    // const { name } = req.body;
+    const { name } = req.body;
 
     const room = new Room({
       name,
