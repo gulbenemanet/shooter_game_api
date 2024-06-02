@@ -27,6 +27,7 @@ const roomSchema = new Schema({
         minlength: 3,
         maxlength: 50
     },
+    participants: []
 }, { collection: 'rooms' })
 
 const Room = mongoose.model('Rooms', roomSchema)
