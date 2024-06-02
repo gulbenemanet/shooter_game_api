@@ -3,7 +3,7 @@ module.exports = async function auth(req, res, next) {
     const User = require('../models/gamer')
     const Token = require('../models/token')
     try {
-        console.log(req.headers);
+        // console.log(req.headers);
         const token = await (req.headers['authorization'].split(' ')[1])
         console.log(token);
         if (token == null) {
@@ -13,24 +13,41 @@ module.exports = async function auth(req, res, next) {
                 message: "Belirtilen token BOŞ."
             })
         }
-        const isToken = Token.findOne({ token: token }, async(err, docs) => {
-            if (err) {
-                res.json(err);
-            } else if (docs) {
-                res.status(401).json({
-                    success: false,
-                    code: 401,
-                    message: "Çıkış yaptığınız tokenle giremezsiniz."
-                })
-            } else {
-                const sonuc = jwt.verify(token, 'supersecret')
+        const isToken = await Token.findOne({ token: token });
+        if (!isToken) {
+            res.json("hata");
+        } else if (docs) {
+            res.status(401).json({
+                success: false,
+                code: 401,
+                message: "Çıkış yaptığınız tokenle giremezsiniz."
+            })
+        } else {
+            const sonuc = jwt.verify(token, 'supersecret')
 
-                //console.log(sonuc);
-                const bulunan = await User.findById(sonuc.id)
-                req.user = bulunan
-                next()
-            }
-        })
+            //console.log(sonuc);
+            const bulunan = await User.findById(sonuc.id)
+            req.user = bulunan
+            next()
+        }
+        // const isToken = Token.findOne({ token: token }, async(err, docs) => {
+        //     if (err) {
+        //         res.json(err);
+        //     } else if (docs) {
+        //         res.status(401).json({
+        //             success: false,
+        //             code: 401,
+        //             message: "Çıkış yaptığınız tokenle giremezsiniz."
+        //         })
+        //     } else {
+        //         const sonuc = jwt.verify(token, 'supersecret')
+
+        //         //console.log(sonuc);
+        //         const bulunan = await User.findById(sonuc.id)
+        //         req.user = bulunan
+        //         next()
+        //     }
+        // })
 
     } catch (err) {
         if (err.message == 'invalid signature') {
