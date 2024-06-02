@@ -28,7 +28,7 @@ const register = async (req, res) => {
     })
     await user.save();
 
-    res.status(201).json({ message: 'Kullanıcı başarıyla oluşturuldu' } + token);
+    res.status(201).json({ message: 'Kullanıcı başarıyla oluşturuldu' + token });
   } catch (err) {
     res.status(500).json({ message: err});
   }
@@ -53,7 +53,7 @@ const login = async (req, res) => {
     const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1h' });
 
     // res.json("Başarılı");
-    res.status(201).json({ message: 'Başarılı' } + token);
+    res.status(201).json({ message: 'Başarılı' + token});
   } catch (err) {
     res.status(500).json({ message: 'Sunucu hatası' } + err);
   }
@@ -70,7 +70,7 @@ const getRooms = async (req, res) => {
 
 const postRooms = async (req, res) => {
   try {
-    const { name } = req.body;
+    // const { name } = req.body;
 
     const room = new Room({
       name,

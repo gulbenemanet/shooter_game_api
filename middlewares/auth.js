@@ -1,6 +1,6 @@
 module.exports = async function auth(req, res, next) {
     const jwt = require('jsonwebtoken')
-    const User = require('../models/user_model')
+    const User = require('../models/gamer')
     const Token = require('../models/token_model')
     try {
         // console.log(req.headers);

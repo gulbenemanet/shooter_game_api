@@ -1,6 +1,6 @@
 const express = require('express');
 const api = require('../controllers/apiController');
-
+const auth = require('../middlewares/auth');
 const router = express.Router();
 
 
@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
 router.post('/register', api.register)
 router.post('/login', api.login)
 router.get('/api/rooms', api.getRooms)
-router.post('/api/rooms/create', api.postRooms)
+router.post('/api/rooms/create', auth, api.postRooms)
 router.get('/api/rooms/:roomId', api.oneRoom)
 router.put('/api/rooms/:roomId', api.updateOneRoom)
 router.post('/api/rooms/:roomId/join', api.joinRoom)
