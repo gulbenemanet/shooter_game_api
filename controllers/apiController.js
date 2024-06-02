@@ -71,6 +71,7 @@ const getRooms = async (req, res) => {
 const postRooms = async (req, res) => {
   try {
     const { name } = req.body;
+    console.log(req.user);
 
     const room = new Room({
       name,
