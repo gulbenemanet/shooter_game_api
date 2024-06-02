@@ -134,7 +134,7 @@ const joinRoom = async (req, res) => {
     }
     if (!room.participants.includes(user.username)) {
       room.participants.push(user.username);
-      room.count = room.count ? room.count + 1 : 1;
+      room.count = room.count + 1;
       await room.save();
     }
     io.to(req.params.roomId).emit('userJoined', { userId: user._id, roomId: req.params.roomId });
