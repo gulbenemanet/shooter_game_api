@@ -28,7 +28,7 @@ const register = async (req, res) => {
     })
     await user.save();
 
-    res.status(201).json({ message: 'Kullanıcı başarıyla oluşturuldu' + token });
+    res.status(201).json( token );
   } catch (err) {
     res.status(500).json({ message: err});
   }
@@ -53,7 +53,7 @@ const login = async (req, res) => {
     const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1h' });
 
     // res.json("Başarılı");
-    res.status(201).json({ message: 'Başarılı' + token});
+    res.status(201).json( token );
   } catch (err) {
     res.status(500).json({ message: 'Sunucu hatası' } + err);
   }
