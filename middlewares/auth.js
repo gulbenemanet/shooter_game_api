@@ -14,7 +14,7 @@ module.exports = async function auth(req, res, next) {
             })
         }
         const isToken = await Token.findOne({ token: token });
-        if (!isToken) {
+        if (isToken) {
             res.json("hata");
         } else if (docs) {
             res.status(401).json({
