@@ -60,6 +60,22 @@ const login = async (req, res) => {
   }
 }
 
+const getUsers = async (req, res) => {
+  try {
+    const onlineGamers = await Gamer.find({ status: 'online' });
+    // console.log('Online oyuncular:', onlineGamers);
+    const filteredGamers = onlineGamers.map(gamer => {
+      return {
+        username: gamer.username,
+      };
+    });
+    res.json(filteredGamers)
+  } catch (err) {
+    console.error('Hata:', err);
+    res.json(err)
+  }
+}
+
 const getRooms = async (req, res) => {
   try {
     const rooms = await Room.find();
@@ -342,5 +358,6 @@ module.exports = {
   getOneGame,
   startGame,
   leaveGame,
-  joinGame
+  joinGame,
+  getUsers
 }

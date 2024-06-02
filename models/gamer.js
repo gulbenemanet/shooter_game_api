@@ -28,6 +28,11 @@ const gamerSchema = new Schema({
     },
     point: {
         type: String,
+        default: "0"
+    },
+    status: {
+        type: String,
+        default: "online"
     }
 }, { collection: 'gamers' })
 

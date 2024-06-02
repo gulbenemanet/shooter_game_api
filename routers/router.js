@@ -11,6 +11,7 @@ router.get('/', (req, res) => {
 router.post('/register', api.register)
 router.post('/login', api.login)
 router.get('/api/rooms', api.getRooms)
+router.get('/api/gamers', api.getUsers)
 router.post('/api/rooms/create', api.postRooms)
 router.get('/api/rooms/:roomId', api.oneRoom)
 router.put('/api/rooms/:roomId', api.updateOneRoom)
