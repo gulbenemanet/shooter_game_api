@@ -25,7 +25,7 @@ const register = async (req, res) => {
 
     res.status(201).json({ message: 'Kullanıcı başarıyla oluşturuldu' });
   } catch (err) {
-    res.status(500).json({ message: 'Sunucu hatası' } + err);
+    res.status(500).json({ message: err});
   }
 }
 
