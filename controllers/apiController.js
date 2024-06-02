@@ -50,7 +50,7 @@ const login = async (req, res) => {
       return res.status(400).json({ message: 'Geçersiz kullanıcı adı veya şifre' });
     }
 
-    const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, 'supersecret', { expiresIn: '24h' });
 
     // res.json("Başarılı");
     res.status(201).json( token );
