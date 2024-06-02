@@ -18,7 +18,7 @@ const messageSchema = new Schema({
     date:{
         type: String,
     },
-}, { collection: 'game' })
+}, { collection: 'messages' })
 
 const Message = mongoose.model('Messages', messageSchema)
 

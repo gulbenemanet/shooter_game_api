@@ -32,7 +32,7 @@ const gameSchema = new Schema({
     start_end_date:{
         type: String,
     },
-}, { collection: 'game' })
+}, { collection: 'games' })
 
 const Game = mongoose.model('Games', gameSchema)
 

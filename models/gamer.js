@@ -29,7 +29,7 @@ const gamerSchema = new Schema({
     point: {
         type: String,
     }
-}, { collection: 'game' })
+}, { collection: 'gamers' })
 
 const Gamer = mongoose.model('Gamer', gamerSchema)
 

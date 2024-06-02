@@ -21,11 +21,12 @@ const roomSchema = new Schema({
     status: {
         type: String,
         //required: true,
+        default: "waiting",
         trim: true,
         minlength: 3,
         maxlength: 50
     },
-}, { collection: 'game' })
+}, { collection: 'rooms' })
 
 const Room = mongoose.model('Rooms', roomSchema)
 
