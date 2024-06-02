@@ -16,7 +16,8 @@ const roomSchema = new Schema({
         type: Number
     },
     count: {
-        type: Number
+        type: Number,
+        default: 1
     },
     status: {
         type: String,
