@@ -74,7 +74,7 @@ const postRooms = async (req, res) => {
 
     const room = new Room({
       name,
-      roomAdmin: req.userId
+      roomAdmin: req.user
     });
 
     await room.save();
