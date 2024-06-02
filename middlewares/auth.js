@@ -15,8 +15,6 @@ module.exports = async function auth(req, res, next) {
         }
         const isToken = await Token.findOne({ token: token });
         if (isToken) {
-            res.json("hata");
-        } else if (docs) {
             res.status(401).json({
                 success: false,
                 code: 401,
@@ -30,25 +28,6 @@ module.exports = async function auth(req, res, next) {
             req.user = bulunan
             next()
         }
-        // const isToken = Token.findOne({ token: token }, async(err, docs) => {
-        //     if (err) {
-        //         res.json(err);
-        //     } else if (docs) {
-        //         res.status(401).json({
-        //             success: false,
-        //             code: 401,
-        //             message: "Çıkış yaptığınız tokenle giremezsiniz."
-        //         })
-        //     } else {
-        //         const sonuc = jwt.verify(token, 'supersecret')
-
-        //         //console.log(sonuc);
-        //         const bulunan = await User.findById(sonuc.id)
-        //         req.user = bulunan
-        //         next()
-        //     }
-        // })
-
     } catch (err) {
         if (err.message == 'invalid signature') {
             res.status(401).json({
