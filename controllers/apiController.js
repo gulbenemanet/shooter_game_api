@@ -62,10 +62,10 @@ const login = async (req, res) => {
 
 const getRooms = async (req, res) => {
   try {
-    const rooms = await Room.find().populate('createdBy participants', 'username');
+    const rooms = await Room.find();
     res.json(rooms);
   } catch (err) {
-    res.status(500).json({ message: 'Sunucu hatası' });
+    res.status(500).json({ message: 'Sunucu hatası ' + err});
   }
 }
 
@@ -89,7 +89,7 @@ const postRooms = async (req, res) => {
 
 const oneRoom = async (req, res) => {
   try {
-    const room = await Room.findById(req.params.roomId).populate('createdBy participants', 'username');
+    const room = await Room.findById(req.params.roomId);
     if (!room) {
       return res.status(404).json({ message: 'Oda bulunamadı' });
     }
