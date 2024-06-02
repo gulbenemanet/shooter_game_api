@@ -6,6 +6,7 @@ const Game = require('../models/games')
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+const jwt = require('jsonwebtoken');
 
 const register = async (req, res) => {
   try {
@@ -21,9 +22,14 @@ const register = async (req, res) => {
 
     // Yeni kullanıcı oluştur ve kaydet
     const user = new Gamer({ username, password: hashedPassword, email });
+    const token = await jwt.sign({
+      id: user._id
+    }, 'supersecret', {
+        expiresIn: '24h'
+    })
     await user.save();
 
-    res.status(201).json({ message: 'Kullanıcı başarıyla oluşturuldu' });
+    res.status(201).json({ message: 'Kullanıcı başarıyla oluşturuldu' } + token);
   } catch (err) {
     res.status(500).json({ message: err});
   }
@@ -45,11 +51,10 @@ const login = async (req, res) => {
       return res.status(400).json({ message: 'Geçersiz kullanıcı adı veya şifre' });
     }
 
-    // JWT oluştur
-    // const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1h' });
+    const token = jwt.sign({ userId: user._id }, 'secret_key', { expiresIn: '1h' });
 
     // res.json("Başarılı");
-    res.status(201).json({ message: 'Başarılı' });
+    res.status(201).json({ message: 'Başarılı' } + token);
   } catch (err) {
     res.status(500).json({ message: 'Sunucu hatası' } + err);
   }
