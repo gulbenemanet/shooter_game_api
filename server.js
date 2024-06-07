@@ -11,7 +11,7 @@ require('./config/database')
 app.use('/', router);
 const net = require('net');
 const PORT2 = 12345;
-const ADDRESS = 'https://agprogramlama-14b4806fa4fe.herokuapp.com';
+const ADDRESS = '127.0.0.1';
 let clients = [];
 
 
