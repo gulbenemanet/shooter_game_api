@@ -33,14 +33,6 @@ const io = socketIo(server, {
 io.on('connection', (socket) => {
   console.log('a user connected:', socket.id);
 
-  socket.on('joinRoom', ({ roomId, userId }) => {
-    // Örnek kullanıcı ve oda işlemleri, kendi veritabanı ve mantığınıza göre uyarlayın
-    console.log(`User ${userId} joined room ${roomId}`);
-    socket.join(roomId);
-
-    // Odaya katıldığını diğer kullanıcılara bildir
-    io.to(roomId).emit('userJoined', { userId, roomId });
-  });
 
   socket.on('disconnect', () => {
     console.log('user disconnected:', socket.id);

@@ -157,7 +157,7 @@ const joinRoom = async (req, res) => {
       room.count = room.count + 1;
       await room.save();
     }
-    // io.to(req.body.roomId).emit('userJoined', { userId: user._id, roomId: req.params.roomId });
+    io.to(req.params.roomId).emit('userJoined', { userId: user._id, roomId: req.params.roomId });
     res.json({ message: 'Odaya katıldınız' });
   } catch (err) {
     res.status(500).json({ message: 'Sunucu hatası: ' + err });
