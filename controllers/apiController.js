@@ -160,10 +160,22 @@ const joinRoom = async (io, req, res) => {
       room.count += 1;
       await room.save();
     }
-    io.on('connection', (socket) => {
-      socket.join(roomId);
-    });
-    io.to(roomId).emit('userJoined', { userId: user._id, roomId: roomId });
+//     io.on('connection', (socket) => {
+//       socket.join(roomId);
+//     });
+//     io.to(roomId).emit('userJoined', { userId: user._id, roomId: roomId });
+      io.on('connection', (socket) => {
+        console.log('Bir kullanıcı bağlandı');
+
+        socket.on('joinRoom', (room) => {
+            socket.join(room);
+            socket.broadcast.to(room).emit('userJoined', { userId: socket.id, room: room });
+        });
+
+        socket.on('disconnect', () => {
+            console.log('Bir kullanıcı ayrıldı');
+          });
+      });
     res.json({ message: 'Odaya katıldınız' });
   } catch (err) {
     res.status(500).json({ message: 'Sunucu hatası: ' + err });
