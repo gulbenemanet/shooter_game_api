@@ -158,6 +158,9 @@ const joinRoom = async (io, req, res) => {
       room.count += 1;
       await room.save();
     }
+    io.on('connection', (socket) => {
+      socket.join(roomId);
+    });
     io.to(roomId).emit('userJoined', { userId: user._id, roomId: roomId });
     res.json({ message: 'Odaya katıldınız' });
   } catch (err) {
