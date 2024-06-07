@@ -142,8 +142,8 @@ const updateOneRoom = async (req, res) => {
 const joinRoom = async (req, res) => {
   try {
     // console.log(req.params);
-    const room = await Room.findById(req.params.roomId);
-    const { userId } = req.body;
+    const room = await Room.findById(req.body.roomId);
+    const { userId } = req.body.userId;
     const user = await Gamer.findById( userId );
     if (!room) {
       return res.status(404).json({ message: 'Oda bulunamadı' });
