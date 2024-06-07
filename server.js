@@ -5,6 +5,7 @@ const socketIo = require('socket.io');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const router = require('./routers/router');
+const socketController = require('./controllers/socketController');
 const net = require('net');
 const PORT2 = 12345;
 const ADDRESS = '127.0.0.1';
@@ -14,8 +15,8 @@ let clients = [];
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-require('dotenv').config()
-require('./config/database')
+require('dotenv').config();
+require('./config/database');
 app.use('/', router);
 
 // HTTP server ve Socket.io server oluşturma
@@ -29,15 +30,8 @@ const io = socketIo(server, {
   }
 });
 
-// Socket.io olayları
-io.on('connection', (socket) => {
-  console.log('a user connected:', socket.id);
-
-
-  socket.on('disconnect', () => {
-    console.log('user disconnected:', socket.id);
-  });
-});
+// Socket.io olaylarını yönlendirme
+socketController(io);
 
 // TCP sunucusu
 const tcpServer = net.createServer((socket) => {

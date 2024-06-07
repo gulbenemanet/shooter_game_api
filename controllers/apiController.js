@@ -139,13 +139,12 @@ const updateOneRoom = async (req, res) => {
   }
 };
 
-const joinRoom = async (req, res) => {
+const joinRoom = async (io, req, res) => {
   try {
     const { roomId, userId } = req.body;
-    // console.log(roomId);
     const room = await Room.findById(roomId);
-
     const user = await Gamer.findById(userId);
+
     if (!room) {
       return res.status(404).json({ message: 'Oda bulunamadı' });
     }
@@ -154,14 +153,14 @@ const joinRoom = async (req, res) => {
     }
     if (!room.participants.includes(user.username)) {
       room.participants.push(user.username);
-      room.count = room.count + 1;
+      room.count += 1;
       await room.save();
     }
-    io.to(req.params.roomId).emit('userJoined', { userId: user._id, roomId: req.params.roomId });
+    io.to(roomId).emit('userJoined', { userId: user._id, roomId: roomId });
     res.json({ message: 'Odaya katıldınız' });
   } catch (err) {
-    res.status(500).json({ message: 'Sunucu hatası: ' + err });
-  }
+    res.status(500).json({ message: 'Sunucu hatası: ' + err });
+  }
 };
 
 const leaveRoom = async (req, res) => {
