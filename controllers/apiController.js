@@ -140,8 +140,9 @@ const updateOneRoom = async (req, res) => {
 };
 
 
-const joinRoom = async (io, req, res) => {
+const joinRoom = async (req, res) => {
   try {
+    const io = req.app.get('io'); // io'yu req üzerinden alın
     const { roomId, userId } = req.body;
     const room = await Room.findById(roomId);
     const user = await Gamer.findById(userId);
