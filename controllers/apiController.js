@@ -106,7 +106,7 @@ const postRooms = async (req, res) => {
 
 const oneRoom = async (req, res) => {
   try {
-    const room = await Room.findById(req.body.roomId);
+    const room = await Room.findById(req.params.roomId);
     if (!room) {
       return res.status(404).json({ message: 'Oda bulunamadı' });
     }
