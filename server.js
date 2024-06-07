@@ -16,10 +16,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 require('dotenv').config();
 require('./config/database');
-app.use('/', router);
 
-// HTTP server ve Socket.io server oluşturma
+// HTTP server oluşturma
 const server = http.createServer(app);
+
+// Socket.IO örneğini oluşturma
 const io = socketIo(server, {
   cors: {
     origin: '*', // İhtiyacınıza göre ayarlayın
@@ -31,9 +32,11 @@ const io = socketIo(server, {
 
 // Route'lara io'yu ekleme
 app.use((req, res, next) => {
-  req.app.set('io', io);
+  req.io = io;
   next();
 });
+
+app.use('/', router);
 
 // TCP sunucusu
 const tcpServer = net.createServer((socket) => {
