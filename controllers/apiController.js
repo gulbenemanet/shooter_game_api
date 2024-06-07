@@ -142,6 +142,8 @@ const updateOneRoom = async (req, res) => {
 
 const joinRoom = async (io, req, res) => {
   try {
+    console.log('io:', io);
+    console.log('req.body:', req.body);
     // const io = req.app.get('io'); // io'yu req üzerinden alın
     const { roomId, userId } = req.body;
     const room = await Room.findById(roomId);

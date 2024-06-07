@@ -38,6 +38,14 @@ app.use((req, res, next) => {
 
 app.use('/', router);
 
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+  });
+});
+
+
 // TCP sunucusu
 const tcpServer = net.createServer((socket) => {
   clients.push(socket);

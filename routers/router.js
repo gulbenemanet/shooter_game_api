@@ -17,7 +17,7 @@ router.get('/api/oneRoom/:roomId', api.oneRoom)
 router.put('/api/rooms/:roomId', api.updateOneRoom)
 // router.post('/api/rooms/join', api.joinRoom)
 router.post('/api/rooms/join', (req, res) => {
-    req.io = req.app.get('io');
+    const {roomId, userId} = req.body;
     api.joinRoom(req.io, req, res);
   });
 router.post('/api/rooms/:roomId/leave', api.leaveRoom)
