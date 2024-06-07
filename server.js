@@ -5,7 +5,6 @@ const socketIo = require('socket.io');
 const app = express();
 const PORT = process.env.PORT || 3000;
 const router = require('./routers/router');
-const socketController = require('./controllers/socketController');
 const net = require('net');
 const PORT2 = 12345;
 const ADDRESS = '127.0.0.1';
@@ -30,8 +29,11 @@ const io = socketIo(server, {
   }
 });
 
-// Socket.io olaylarını yönlendirme
-socketController(io);
+// Route'lara io'yu ekleme
+app.use((req, res, next) => {
+  req.io = io;
+  next();
+});
 
 // TCP sunucusu
 const tcpServer = net.createServer((socket) => {

@@ -139,6 +139,7 @@ const updateOneRoom = async (req, res) => {
   }
 };
 
+
 const joinRoom = async (io, req, res) => {
   try {
     const { roomId, userId } = req.body;
@@ -162,6 +163,7 @@ const joinRoom = async (io, req, res) => {
     res.status(500).json({ message: 'Sunucu hatası: ' + err });
   }
 };
+
 
 const leaveRoom = async (req, res) => {
   try {
