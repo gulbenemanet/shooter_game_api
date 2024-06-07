@@ -31,7 +31,7 @@ const io = socketIo(server, {
 
 // Route'lara io'yu ekleme
 app.use((req, res, next) => {
-  req.io = io;
+  req.app.set('io', io);
   next();
 });
 
