@@ -170,6 +170,7 @@ const joinRoom = async (io, req, res) => {
         socket.on('joinRoom', (room) => {
             socket.join(room);
             socket.broadcast.to(room).emit('userJoined', { userId: socket.id, room: room });
+            socket.broadcast.to(room).emit('deneme', 10, 'Hi', { cigar: 'gulben' }); // cigar ekledi
         });
 
         socket.on('disconnect', () => {
