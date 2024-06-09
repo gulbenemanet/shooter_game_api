@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 const router = require('./routers/router');
 const net = require('net');
 const PORT2 = 12345;
-const ADDRESS = '192.168.1.146';
+const ADDRESS = 'localhost';
 let clients = [];
 
 // Middleware
