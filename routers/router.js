@@ -17,7 +17,7 @@ router.get('/api/oneRoom/:roomId', api.oneRoom)
 router.put('/api/rooms/:roomId', api.updateOneRoom)
 // router.post('/api/rooms/join', api.joinRoom)
 router.post('/api/rooms/join', (req, res) => {
-    const {roomId, userId} = req.body;
+    // const {roomId, userId} = req.body;
     api.joinRoom(req.io, req, res);
   });
 router.post('/api/rooms/:roomId/leave', api.leaveRoom)
@@ -25,7 +25,7 @@ router.get('/api/games', api.getGames)
 router.post('/api/games/create', api.postGame)
 router.get('/api/games/:gameId', api.oneRoom)
 router.put('/api/games/:gameId', api.updateOneGame)
-router.post('/api/games/:gameId/start', api.startGame)
+router.post('/api/games/:roomId/start', api.startGame)
 router.post('/api/rooms/:gameId/join', api.joinGame)
 router.post('/api/games/:gameId/leave', api.leaveGame)
 

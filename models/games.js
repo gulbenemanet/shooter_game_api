@@ -10,8 +10,7 @@ const gameSchema = new Schema({
         maxlength: 50
     },
     createdBy: { 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User', 
+        type: String,
         required: true 
     },
     roomid: {
@@ -20,10 +19,7 @@ const gameSchema = new Schema({
     gameAdmin: {
         type: Number
     },
-    participants: [{ 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'User' 
-    }],
+    participants: [],
     status: {
         type: String,
         //required: true,

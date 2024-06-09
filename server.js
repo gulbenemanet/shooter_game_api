@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 const router = require('./routers/router');
 const net = require('net');
 const PORT2 = 12345;
-const ADDRESS = '127.0.0.1';
+const ADDRESS = '192.168.1.146';
 let clients = [];
 
 // Middleware
@@ -38,27 +38,57 @@ app.use((req, res, next) => {
 
 app.use('/', router);
 
+let players = {};
+
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
+
+  socket.on('update', data => {
+    players[socket.id] = data;
+    socket.broadcast.emit('players', players);
+  });
+
+
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
-  });
-});
+    delete players[socket.id];
+        socket.broadcast.emit('players', players);
+  });
 
+  // socket.emit('news', { hello: 'world' });
+  socket.on('data', (data) => {
+    console.log(data);
+  })
+
+  socket.emit('players', players);
+  socket.emit('gameUpdated', "xdxd");
+
+});
 
 // TCP sunucusu
 const tcpServer = net.createServer((socket) => {
   clients.push(socket);
   console.log(`New connection: ${socket.remoteAddress}:${socket.remotePort}`);
-
-  // Yeni oyuncunun bağlandığını tüm istemcilere bildir
-  broadcast(`${socket.remoteAddress}:${socket.remotePort} joined the game.`, socket);
-
+  
+  socket.isAlive = true;
   socket.on('data', (data) => {
+    socket.isAlive = true; // Heartbeat mesajı alındığında bağlantının aktif olduğunu belirt
     const message = data.toString();
     console.log(`Received message: ${message}`);
     broadcast(message, socket);
   });
+
+  const interval = setInterval(() => {
+    if (!socket.isAlive) {
+      console.log(`Connection lost: ${socket.remoteAddress}:${socket.remotePort}`);
+      socket.destroy();
+      clearInterval(interval);
+      clients = clients.filter(client => client !== socket);
+      broadcast(`${socket.remoteAddress}:${socket.remotePort} left the game.`, socket);
+    }
+    socket.isAlive = false;
+    socket.write('PING');
+  }, 10000); // 10 saniyede bir heartbeat kontrolü
 
   socket.on('end', () => {
     console.log(`Connection closed: ${socket.remoteAddress}:${socket.remotePort}`);

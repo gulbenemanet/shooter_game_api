@@ -142,13 +142,14 @@ const updateOneRoom = async (req, res) => {
 
 const joinRoom = async (io, req, res) => {
   try {
-    console.log('io:', io);
-    console.log('req.body:', req.body);
+    // console.log('io:', io);
+    // console.log('req.body:', req.body);
     // const io = req.app.get('io'); // io'yu req üzerinden alın
     const { roomId, userId } = req.body;
     const room = await Room.findById(roomId);
     const user = await Gamer.findById(userId);
-
+    const admin = await Gamer.findOne({username: room.roomAdmin})
+    // console.log(admin);
     if (!room) {
       return res.status(404).json({ message: 'Oda bulunamadı' });
     }
@@ -158,25 +159,11 @@ const joinRoom = async (io, req, res) => {
     if (!room.participants.includes(user.username)) {
       room.participants.push(user.username);
       room.count += 1;
+      userName = room.roomAdmin
       await room.save();
     }
-//     io.on('connection', (socket) => {
-//       socket.join(roomId);
-//     });
-//     io.to(roomId).emit('userJoined', { userId: user._id, roomId: roomId });
-      io.on('connection', (socket) => {
-        console.log('Bir kullanıcı bağlandı');
-
-        socket.on('joinRoom', (room) => {
-            socket.join(room);
-            socket.broadcast.to(room).emit('userJoined', { userId: socket.id, room: room });
-            socket.broadcast.to(room).emit('deneme', 10, 'Hi', { cigar: 'gulben' }); // cigar ekledi
-        });
-
-        socket.on('disconnect', () => {
-            console.log('Bir kullanıcı ayrıldı');
-          });
-      });
+    io.emit('userJoined', { username: user.username, room: roomId   })
+    // io.to(roomId).emit('userJoined', { username: user.username, room: roomId });
     res.json({ message: 'Odaya katıldınız' });
   } catch (err) {
     res.status(500).json({ message: 'Sunucu hatası: ' + err });
@@ -270,24 +257,29 @@ const updateOneGame = async (req, res) => {
 // Bir oyunu başlatma
 const startGame = async (req, res) => {
   try {
-    const game = await Game.findById(req.params.gameId);
-    if (!game) {
+    const roomId = req.params.roomId
+    const room = await Room.findById(roomId);
+    if (!room) {
       return res.status(404).json({ message: 'Oyun bulunamadı' });
     }
+    room.status = 'ongoing';
+    const { name } = req.body;
+    const game = new Game({
+      name,
+      createdBy: room.roomAdmin,
+      roomId,
+      participants: room.participants
+    });
 
-    if (game.createdBy.toString() !== req.userId) {
-      return res.status(403).json({ message: 'Yetkisiz işlem' });
-    }
-
-    game.status = 'ongoing';
     await game.save();
+    res.status(201).json(game);
 
     // WebSocket ile oyunun başladığını bildirme
     io.emit('gameUpdated', { gameId: req.params.gameId, status: 'ongoing', name: game.name });
 
-    res.json({ message: 'Oyun başlatıldı' });
+    // res.json({ message: 'Oyun başlatıldı' });
   } catch (err) {
-    res.status(500).json({ message: 'Sunucu hatası' });
+    res.status(500).json({ message: 'Sunucu hatası' + err });
   }
 };
 
